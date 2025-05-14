@@ -30,13 +30,85 @@ export default function IceScoreCalculator() {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: 'auto', padding: 20 }}>
-      <h2>Calculadora de ICE Score</h2>
-      <input name="impacto" placeholder="Impacto (1-5)" onChange={handleChange} /><br />
-      <input name="confianca" placeholder="Confiança (1-5)" onChange={handleChange} /><br />
-      <input name="facilidade" placeholder="Facilidade (1-5)" onChange={handleChange} /><br />
-      <button onClick={calculateScore}>Calcular</button>
-      {result && <p>{result}</p>}
+    <div style={{
+      maxWidth: 500,
+      margin: '40px auto',
+      padding: 30,
+      border: '1px solid #ddd',
+      borderRadius: 12,
+      fontFamily: 'Arial, sans-serif',
+      backgroundColor: '#fafafa'
+    }}>
+      <h2 style={{ textAlign: 'center' }}>Calculadora de ICE Score</h2>
+      <p style={{ fontSize: 14, color: '#555', marginBottom: 20 }}>
+        Avalie sua ideia com base em 3 critérios: Impacto, Confiança e Facilidade. Use notas de 1 a 5.
+      </p>
+
+      <div style={{ marginBottom: 16 }}>
+        <label><strong>Impacto:</strong></label><br />
+        <small>Qual o potencial dessa ideia gerar impacto real no negócio?</small><br />
+        <input
+          type="number"
+          name="impacto"
+          placeholder="Nota de 1 a 5"
+          value={scores.impacto}
+          onChange={handleChange}
+          style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc' }}
+        />
+      </div>
+
+      <div style={{ marginBottom: 16 }}>
+        <label><strong>Confiança:</strong></label><br />
+        <small>Com base em dados ou experiências, quão confiante estamos de que funcionará?</small><br />
+        <input
+          type="number"
+          name="confianca"
+          placeholder="Nota de 1 a 5"
+          value={scores.confianca}
+          onChange={handleChange}
+          style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc' }}
+        />
+      </div>
+
+      <div style={{ marginBottom: 16 }}>
+        <label><strong>Facilidade:</strong></label><br />
+        <small>É simples de implementar com os recursos atuais?</small><br />
+        <input
+          type="number"
+          name="facilidade"
+          placeholder="Nota de 1 a 5"
+          value={scores.facilidade}
+          onChange={handleChange}
+          style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc' }}
+        />
+      </div>
+
+      <button
+        onClick={calculateScore}
+        style={{
+          width: '100%',
+          backgroundColor: '#1976d2',
+          color: '#fff',
+          padding: 10,
+          borderRadius: 6,
+          border: 'none',
+          cursor: 'pointer',
+          fontWeight: 'bold'
+        }}
+      >
+        Calcular
+      </button>
+
+      {result && (
+        <p style={{ marginTop: 20, fontSize: 16, textAlign: 'center', color: '#333' }}>
+          {result}
+        </p>
+      )}
+
+      <hr style={{ marginTop: 30 }} />
+      <p style={{ textAlign: 'center', fontSize: 12, color: '#999' }}>
+        feito com ❤️ por mli
+      </p>
     </div>
   );
 }

@@ -1,8 +1,6 @@
 import React from 'react';
 import IceScoreCalculator from './IceScoreCalculator';
 
-function App() {
+export default function App() {
   return <IceScoreCalculator />;
 }
-
-export default App;

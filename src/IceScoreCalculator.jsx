@@ -30,6 +30,7 @@ export default function IceScoreCalculator() {
   };
 
   return (
+<h1 style={{ textAlign: 'center', color: 'red' }}>🚨 TESTE VISUAL 🚨</h1>
     <div style={{
       fontFamily: 'Roboto, sans-serif',
       display: 'flex',

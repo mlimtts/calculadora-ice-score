@@ -10,9 +10,9 @@ export default function IceScoreCalculator() {
   };
 
   const calculateScore = () => {
-    const impacto = parseInt(scores.impacto);
-    const confianca = parseInt(scores.confianca);
-    const facilidade = parseInt(scores.facilidade);
+    const impacto = parseInt(scores.impacto, 10);
+    const confianca = parseInt(scores.confianca, 10);
+    const facilidade = parseInt(scores.facilidade, 10);
 
     if ([impacto, confianca, facilidade].some(isNaN)) {
       setResult('Preencha todos os campos corretamente.');
@@ -32,9 +32,9 @@ export default function IceScoreCalculator() {
   return (
     <div style={{ maxWidth: 400, margin: 'auto', padding: 20 }}>
       <h2>Calculadora de ICE Score</h2>
-<input name="impacto" placeholder="Impacto (1-5)" onChange={handleChange} /><br/>
-<input name="confianca" placeholder="Confiança (1-5)" onChange={handleChange} /><br/>
-<input name="facilidade" placeholder="Facilidade (1-5)" onChange={handleChange} /><br/>
+      <input name="impacto" placeholder="Impacto (1-5)" onChange={handleChange} /><br />
+      <input name="confianca" placeholder="Confiança (1-5)" onChange={handleChange} /><br />
+      <input name="facilidade" placeholder="Facilidade (1-5)" onChange={handleChange} /><br />
       <button onClick={calculateScore}>Calcular</button>
       {result && <p>{result}</p>}
     </div>

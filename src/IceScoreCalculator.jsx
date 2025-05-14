@@ -31,84 +31,93 @@ export default function IceScoreCalculator() {
 
   return (
     <div style={{
-      maxWidth: 500,
-      margin: '40px auto',
-      padding: 30,
-      border: '1px solid #ddd',
-      borderRadius: 12,
-      fontFamily: 'Arial, sans-serif',
-      backgroundColor: '#fafafa'
+      fontFamily: 'Roboto, sans-serif',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      backgroundColor: '#f5f5f5',
+      padding: 20
     }}>
-      <h2 style={{ textAlign: 'center' }}>Calculadora de ICE Score</h2>
-      <p style={{ fontSize: 14, color: '#555', marginBottom: 20 }}>
-        Avalie sua ideia com base em 3 critérios: Impacto, Confiança e Facilidade. Use notas de 1 a 5.
-      </p>
-
-      <div style={{ marginBottom: 16 }}>
-        <label><strong>Impacto:</strong></label><br />
-        <small>Qual o potencial dessa ideia gerar impacto real no negócio?</small><br />
-        <input
-          type="number"
-          name="impacto"
-          placeholder="Nota de 1 a 5"
-          value={scores.impacto}
-          onChange={handleChange}
-          style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc' }}
-        />
-      </div>
-
-      <div style={{ marginBottom: 16 }}>
-        <label><strong>Confiança:</strong></label><br />
-        <small>Com base em dados ou experiências, quão confiante estamos de que funcionará?</small><br />
-        <input
-          type="number"
-          name="confianca"
-          placeholder="Nota de 1 a 5"
-          value={scores.confianca}
-          onChange={handleChange}
-          style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc' }}
-        />
-      </div>
-
-      <div style={{ marginBottom: 16 }}>
-        <label><strong>Facilidade:</strong></label><br />
-        <small>É simples de implementar com os recursos atuais?</small><br />
-        <input
-          type="number"
-          name="facilidade"
-          placeholder="Nota de 1 a 5"
-          value={scores.facilidade}
-          onChange={handleChange}
-          style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #ccc' }}
-        />
-      </div>
-
-      <button
-        onClick={calculateScore}
-        style={{
-          width: '100%',
-          backgroundColor: '#1976d2',
-          color: '#fff',
-          padding: 10,
-          borderRadius: 6,
-          border: 'none',
-          cursor: 'pointer',
-          fontWeight: 'bold'
-        }}
-      >
-        Calcular
-      </button>
-
-      {result && (
-        <p style={{ marginTop: 20, fontSize: 16, textAlign: 'center', color: '#333' }}>
-          {result}
+      <div style={{
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+        padding: 30,
+        maxWidth: 500,
+        width: '100%'
+      }}>
+        <h2 style={{ textAlign: 'center', marginBottom: 10 }}>Calculadora de ICE Score</h2>
+        <p style={{ fontSize: 14, color: '#666', textAlign: 'center', marginBottom: 30 }}>
+          Avalie sua ideia com base em Impacto, Confiança e Facilidade. Notas de 1 a 5.
         </p>
-      )}
 
-      <hr style={{ marginTop: 30 }} />
-      <p style={{ textAlign: 'center', fontSize: 12, color: '#999' }}>
-        feito com ❤️ por mli
-      </p>
+        {['impacto', 'confianca', 'facilidade'].map((campo) => (
+          <div style={{ marginBottom: 20 }} key={campo}>
+            <label style={{ display: 'block', marginBottom: 4, fontWeight: 'bold' }}>
+              {campo === 'impacto' && 'Impacto'}
+              {campo === 'confianca' && 'Confiança'}
+              {campo === 'facilidade' && 'Facilidade'}
+            </label>
+            <small style={{ color: '#888' }}>
+              {campo === 'impacto' && 'Potencial de gerar impacto real no negócio'}
+              {campo === 'confianca' && 'Confiança baseada em dados ou experiências'}
+              {campo === 'facilidade' && 'Facilidade de implementação com recursos atuais'}
+            </small>
+            <input
+              type="number"
+              name={campo}
+              value={scores[campo]}
+              onChange={handleChange}
+              placeholder="Nota de 1 a 5"
+              style={{
+                width: '100%',
+                padding: '10px',
+                marginTop: 6,
+                borderRadius: 8,
+                border: '1px solid #ccc',
+                boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.06)'
+              }}
+            />
+          </div>
+        ))}
+
+        <button
+          onClick={calculateScore}
+          style={{
+            width: '100%',
+            padding: 12,
+            backgroundColor: '#1976d2',
+            color: '#fff',
+            fontWeight: 'bold',
+            border: 'none',
+            borderRadius: 8,
+            cursor: 'pointer',
+            transition: 'background-color 0.3s'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#115293'}
+          onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#1976d2'}
+        >
+          Calcular
+        </button>
+
+        {result && (
+          <div style={{ marginTop: 30, fontSize: 16, textAlign: 'center', color: '#333' }}>
+            {result}
+          </div>
+        )}
+
+        <div style={{
+          marginTop: 40,
+          textAlign: 'center',
+          fontSize: 12,
+          color: '#aaa',
+          borderTop: '1px solid #eee',
+          paddingTop: 20
+        }}>
+          feito com ❤️ por mli
+        </div>
+      </div>
     </div>
   );
 }

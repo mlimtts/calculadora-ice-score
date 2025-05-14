@@ -1,12 +1,38 @@
 import React, { useState } from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function IceScoreCalculator() {
   const [scores, setScores] = useState({ impacto: '', confianca: '', facilidade: '' });
   const [result, setResult] = useState(null);
+  const [score, setScore] = useState(null);
+  const [hipotese, setHipotese] = useState('');
+  const [hipoteseNota, setHipoteseNota] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setScores({ ...scores, [name]: value });
+  };
+
+  const avaliarHipotese = (texto) => {
+    const criterios = [
+      /persona|médico|perfil/i,
+      /canal|ads|email|instagram|facebook|linkedin/i,
+      /ativo|ebook|conteúdo|masterclass|webinar/i,
+      /cpl|cpa|métrica|meta|conversão|resultado esperado/i,
+      /hipótese|esperamos que|acreditamos que|causa/i,
+      /prazo|período|início|fim|data/i
+    ];
+    const encontrados = criterios.filter((regex) => regex.test(texto)).length;
+    return {
+      nota: encontrados,
+      mensagem: encontrados >= 5 ?
+        'Hipótese bem estruturada' :
+        'Hipótese precisa ser mais clara e conter todos os elementos do experimento'
+    };
   };
 
   const calculateScore = () => {
@@ -15,110 +41,69 @@ export default function IceScoreCalculator() {
     const facilidade = parseFloat(scores.facilidade);
 
     if ([impacto, confianca, facilidade].some(isNaN)) {
-      setResult('Preencha todos os campos corretamente.');
+      setResult('Por favor, insira todos os valores corretamente.');
       return;
     }
 
-    const total = ((impacto + confianca + facilidade) / 3).toFixed(1);
-    let classificacao = '';
+    const calculatedScore = ((impacto + confianca + facilidade) / 3).toFixed(1);
+    setScore(calculatedScore);
 
-    if (total >= 4.5) classificacao = 'Alta prioridade para escalar ou reaplicar';
-    else if (total >= 3.5) classificacao = 'Potencial de otimização ou segmentação melhor';
-    else classificacao = 'Descartar ou revisar hipótese';
+    let classification = '';
+    if (calculatedScore >= 4.5) {
+      classification = 'Alta prioridade para escalar ou reaplicar';
+    } else if (calculatedScore >= 3.5) {
+      classification = 'Potencial de otimização ou segmentação melhor';
+    } else {
+      classification = 'Descartar ou revisar hipótese';
+    }
 
-    setResult(`ICE Score: ${total} — ${classificacao}`);
+    setResult(`ICE Score: ${calculatedScore} — ${classification}`);
+
+    const avaliacao = avaliarHipotese(hipotese);
+    setHipoteseNota(`Nota da Hipótese: ${avaliacao.nota}/6 — ${avaliacao.mensagem}`);
   };
 
   return (
-    <div style={{
-      fontFamily: 'Roboto, sans-serif',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '100vh',
-      backgroundColor: '#f5f5f5',
-      padding: 20
-    }}>
-      <div style={{
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-        padding: 30,
-        maxWidth: 500,
-        width: '100%'
-      }}>
-        <h2 style={{ textAlign: 'center', marginBottom: 10 }}>Calculadora de ICE Score</h2>
-        <p style={{ fontSize: 14, color: '#666', textAlign: 'center', marginBottom: 30 }}>
-          Avalie sua ideia com base em Impacto, Confiança e Facilidade. Notas de 1 a 5.
-        </p>
+    <div className="max-w-md mx-auto mt-10">
+      <Card className="shadow-lg rounded-2xl border border-gray-200">
+        <CardContent className="space-y-6 p-6">
+          <h2 className="text-2xl font-bold text-gray-800">Calculadora de ICE Score</h2>
+          <p className="text-sm text-gray-600">Preencha os campos abaixo com notas de 1 a 5 para calcular a priorização de sua ideia com base no framework ICE.</p>
 
-        {['impacto', 'confianca', 'facilidade'].map((campo) => (
-          <div style={{ marginBottom: 20 }} key={campo}>
-            <label style={{ display: 'block', marginBottom: 4, fontWeight: 'bold' }}>
-              {campo === 'impacto' && 'Impacto'}
-              {campo === 'confianca' && 'Confiança'}
-              {campo === 'facilidade' && 'Facilidade'}
-            </label>
-            <small style={{ color: '#888' }}>
-              {campo === 'impacto' && 'Potencial de gerar impacto real no negócio'}
-              {campo === 'confianca' && 'Confiança baseada em dados ou experiências'}
-              {campo === 'facilidade' && 'Facilidade de implementação com recursos atuais'}
-            </small>
-            <input
-              type="number"
-              min="1"
-              max="5"
-              step="0.1"
-              name={campo}
-              value={scores[campo]}
-              onChange={handleChange}
-              placeholder="Nota de 1 a 5"
-              style={{
-                width: '100%',
-                padding: '10px',
-                marginTop: 6,
-                borderRadius: 8,
-                border: '1px solid #ccc',
-                boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.06)'
-              }}
-            />
+          <div>
+            <Label htmlFor="impacto">Impacto</Label>
+            <p className="text-xs text-gray-500 mb-1">Qual o potencial dessa ideia gerar impacto real no negócio?</p>
+            <Input name="impacto" placeholder="Impacto (1-5)" value={scores.impacto} onChange={handleChange} />
           </div>
-        ))}
 
-        <button
-          onClick={calculateScore}
-          style={{
-            width: '100%',
-            padding: 12,
-            backgroundColor: '#1976d2',
-            color: '#fff',
-            fontWeight: 'bold',
-            border: 'none',
-            borderRadius: 8,
-            cursor: 'pointer',
-            transition: 'background-color 0.3s'
-          }}
-        >
-          Calcular
-        </button>
-
-        {result && (
-          <div style={{ marginTop: 30, fontSize: 16, textAlign: 'center', color: '#333' }}>
-            {result}
+          <div>
+            <Label htmlFor="confianca">Confiança</Label>
+            <p className="text-xs text-gray-500 mb-1">Com base em dados ou experiências, quão confiante estamos de que funcionará?</p>
+            <Input name="confianca" placeholder="Confiança (1-5)" value={scores.confianca} onChange={handleChange} />
           </div>
-        )}
 
-        <div style={{
-          marginTop: 40,
-          textAlign: 'center',
-          fontSize: 12,
-          color: '#aaa',
-          borderTop: '1px solid #eee',
-          paddingTop: 20
-        }}>
-          feito com ❤️ por mli
-        </div>
-      </div>
+          <div>
+            <Label htmlFor="facilidade">Facilidade</Label>
+            <p className="text-xs text-gray-500 mb-1">É simples de implementar com os recursos atuais?</p>
+            <Input name="facilidade" placeholder="Facilidade (1-5)" value={scores.facilidade} onChange={handleChange} />
+          </div>
+
+          <div>
+            <Label htmlFor="hipotese">Hipótese do experimento</Label>
+            <p className="text-xs text-gray-500 mb-1">Descreva a hipótese conforme a estrutura: Persona / Canal / Ativo / Resultado Esperado / Hipótese / Prazo</p>
+            <Textarea placeholder="Digite aqui sua hipótese" value={hipotese} onChange={(e) => setHipotese(e.target.value)} />
+          </div>
+
+          <Button onClick={calculateScore} className="w-full">Calcular</Button>
+
+          {result && <p className="text-lg font-medium mt-4 text-center text-gray-700">{result}</p>}
+          {hipoteseNota && <p className="text-sm mt-2 text-center text-gray-600">{hipoteseNota}</p>}
+
+          <div className="pt-4 border-t text-xs text-center text-gray-400">
+            feito com ❤️ por mli
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

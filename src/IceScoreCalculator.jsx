@@ -30,7 +30,6 @@ export default function IceScoreCalculator() {
   };
 
   return (
-<h1 style={{ textAlign: 'center', color: 'red' }}>🚨 TESTE VISUAL 🚨</h1>
     <div style={{
       fontFamily: 'Roboto, sans-serif',
       display: 'flex',
@@ -96,8 +95,6 @@ export default function IceScoreCalculator() {
             cursor: 'pointer',
             transition: 'background-color 0.3s'
           }}
-          onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#115293'}
-          onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#1976d2'}
         >
           Calcular
         </button>
